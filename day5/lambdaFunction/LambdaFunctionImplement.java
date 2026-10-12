@@ -35,8 +35,8 @@ public class LambdaFunctionImplement {
         System.out.println("Divide: "+divide.calculate(10,5));
 
 
-        CheckEvenOdd checkeven = (int x) -> { return x%2==0; };
-        CheckEvenOdd checkodd = (int x) -> { return x%2!=0; };
+        CheckEvenOdd checkeven = (int x) -> x%2==0;
+        CheckEvenOdd checkodd = (int x) -> x%2!=0;
 
         System.out.println("Even: "+ checkeven.check(20));
         System.out.println("Even: "+ checkeven.check(15));
