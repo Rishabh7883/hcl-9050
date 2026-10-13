@@ -1,8 +1,6 @@
 package day6.streamImplement;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class PrintValue{
@@ -13,7 +11,14 @@ class PrintValue{
 public class StreamImplementation {
     static void main() {
         ArrayList<Integer> intlist= new ArrayList<>(Arrays.asList(10, 25, 30, 15, 40, 5));
-        ArrayList<String> strlist=new ArrayList<>(Arrays.asList("Rishabh","Ankit","Shashank","Amit"));
+        ArrayList<String> strlist=new ArrayList<>(Arrays.asList("Rishabh","Ankit","Ritika","Shashank","Amit","Shalini"));
+        Map<String,String> nameinfo=new HashMap<>();
+        nameinfo.put("Rishabh","male");
+        nameinfo.put("Ankit","male");
+        nameinfo.put("Ritika","female");
+        nameinfo.put("Shashank","male");
+        nameinfo.put("Amit","male");
+        nameinfo.put("Shalini","female");
 
         System.out.println("Even numbers:");
         intlist.stream().filter(n->n%2==0).forEach(PrintValue::output);
@@ -32,5 +37,12 @@ public class StreamImplementation {
         System.out.println(countname);
         System.out.println("A Name List:");
         System.out.println(aNameList);
+
+        System.out.println("Adding Mr and Ms:");
+        List<String> updatednames=strlist.stream().map(name->{
+            if(nameinfo.get(name).equals("female")) return "Ms. "+name;
+            else return "Mr. "+name;
+        }).collect(Collectors.toList());
+        System.out.println(updatednames);
     }
 }
