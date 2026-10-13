@@ -1,9 +1,6 @@
 package day5.lambdaFunction;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class PredefinedFunctionalInterface {
     static void main() {
@@ -28,5 +25,10 @@ public class PredefinedFunctionalInterface {
 
         System.out.println("Using Function For calculating: ");
         System.out.println(square.apply(5));
+
+        BiFunction<Integer,Integer,Integer> add =(a,b)->a+b;
+
+        System.out.println("Using ByFunction For adding two number: ");
+        System.out.println(add.apply(10, 20));
     }
 }
