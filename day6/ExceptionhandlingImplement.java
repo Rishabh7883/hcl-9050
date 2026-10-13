@@ -8,8 +8,8 @@ class InvalidAgeException extends Exception {
 
 
 public class ExceptionhandlingImplement {
-    static void checkAge(int age) throws InvalidAgeException {
-        if (age < 18) {
+    static void checkAge(int age) throws InvalidAgeException{
+        if (age<18){
             throw new InvalidAgeException("Age must be 18 or above");
         }
         System.out.println("Eligible");
