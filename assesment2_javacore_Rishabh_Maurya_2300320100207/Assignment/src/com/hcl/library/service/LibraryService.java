@@ -97,12 +97,12 @@ public class LibraryService {
         member.removeBorrowedItem(item);
         item.giveBack();
 
-        Queue<Member> queue = waitlist.get(itemId);
+        Queue<Member> queue=waitlist.get(itemId);
 
         if (queue != null && !queue.isEmpty()) {
-            Member nextMember = queue.peek();
+            Member nextMember=queue.peek();
             System.out.println("Notification: Member "
-                    + nextMember.getId() + " (" + nextMember.getName()
+                    + nextMember.getId() + " (" +nextMember.getName()
                     + ") is next in the waitlist for " + itemId + ".");
         }
 
@@ -142,7 +142,7 @@ public class LibraryService {
     public List<LibraryItem> search(String title) {
         String key = title.toLowerCase();
 
-        List<LibraryItem> results = new ArrayList<>();
+        List<LibraryItem> results =new ArrayList<>();
 
         for (LibraryItem item : itemRepository.findAll()) {
             if (item.getTitle().toLowerCase().contains(key)) {
