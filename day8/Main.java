@@ -9,7 +9,9 @@ class Example{
 class PrivateImpl{
     private static PrivateImpl obj=new PrivateImpl();
     private int count=0;
-    private void PrivateImp(){
+
+    private PrivateImpl(){
+
     }
 
     public static PrivateImpl getInstance(){
