@@ -1,9 +1,9 @@
-package com.springcorefundamentals.springbootfundamentals.repository;
+package com.example.hrms.repository;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmployeeRepositoryImp implements EmployeeRepository{
+public class EmployeeRepositoryImpl implements EmployeeRepository {
     @Override
     public double squareroot(double d){
         return Math.sqrt(d);

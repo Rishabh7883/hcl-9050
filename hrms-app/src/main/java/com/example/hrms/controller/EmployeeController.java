@@ -1,6 +1,6 @@
-package com.springcorefundamentals.springbootfundamentals.controller;
+package com.example.hrms.controller;
 
-import com.springcorefundamentals.springbootfundamentals.model.Employee;
+import com.example.hrms.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package com.springcorefundamentals.springbootfundamentals.repository;
+package com.example.hrms.repository;
 
 import org.springframework.stereotype.Repository;
 
