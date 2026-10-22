@@ -1,14 +1,34 @@
 package com.example.hrms.repository;
 
+import com.example.hrms.model.Employee;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository
-public interface EmployeeRepository {
-    public double squareroot(double d);
+public class EmployeeRepository {
+    private final List<Employee> employees = new ArrayList<>();
+    private long nextId = 1;
 
-    public String empData();
+    public List<Employee> findAll() {
+        return employees;
+    }
 
-    int add(int a, int b);
+    public Employee findById(long id) {
+        return employees.stream()
+                .filter(e -> e.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
 
-    int gtn(int a, int b);
+    public Employee save(Employee employee) {
+        employee.setId(nextId++);
+        employees.add(employee);
+        return employee;
+    }
+
+    public void delete(long id) {
+        employees.removeIf(e -> e.getId() == id);
+    }
 }
