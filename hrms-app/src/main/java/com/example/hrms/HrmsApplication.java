@@ -1,6 +1,5 @@
 package com.example.hrms;
 
-import com.example.hrms.controller.EmployeeController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
