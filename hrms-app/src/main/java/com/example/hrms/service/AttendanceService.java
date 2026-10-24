@@ -20,13 +20,13 @@ public class AttendanceService {
 
     public List<Attendance> getAll(Long employeeId, LocalDate date) {
         return repository.findAll().stream()
-                .filter(a -> employeeId == null || a.getEmployeeId() == employeeId)
+                .filter(a -> employeeId == null || a.getEmployeeId().equals(employeeId))
                 .filter(a -> date == null || a.getDate().equals(date))
                 .toList();
     }
 
     public Attendance getById(long id) {
-        return repository.findById(id);
+        return repository.findById(id).orElse(null);
     }
 
     public Attendance checkIn(long employeeId) {
@@ -34,38 +34,40 @@ public class AttendanceService {
             return null;
         }
 
+        LocalDate today = LocalDate.now();
+
         boolean exists = repository.findAll().stream()
-                .anyMatch(a -> a.getEmployeeId() == employeeId
-                        && a.getDate().equals(LocalDate.now()));
+                .anyMatch(a -> a.getEmployeeId().equals(employeeId)
+                        && a.getDate().equals(today));
 
         if (exists) {
             return null;
         }
 
         Attendance attendance = new Attendance(
-                0, employeeId, LocalDate.now(), LocalDateTime.now(), null
+                null, employeeId, today, LocalDateTime.now(), null
         );
 
         return repository.save(attendance);
     }
 
     public Attendance checkOut(long id) {
-        Attendance attendance = repository.findById(id);
+        Attendance attendance = getById(id);
 
         if (attendance == null || attendance.getCheckOut() != null) {
             return null;
         }
 
         attendance.setCheckOut(LocalDateTime.now());
-        return attendance;
+        return repository.save(attendance);
     }
 
     public boolean delete(long id) {
-        if (repository.findById(id) == null) {
+        if (!repository.existsById(id)) {
             return false;
         }
 
-        repository.delete(id);
+        repository.deleteById(id);
         return true;
     }
-}
+}}

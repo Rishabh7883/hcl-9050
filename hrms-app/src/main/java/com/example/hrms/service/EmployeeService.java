@@ -19,15 +19,16 @@ public class EmployeeService {
     }
 
     public Employee getById(long id) {
-        return repository.findById(id);
+        return repository.findById(id).orElse(null);
     }
 
     public Employee add(Employee employee) {
+        employee.setId(null);
         return repository.save(employee);
     }
 
     public Employee update(long id, Employee updated) {
-        Employee employee = repository.findById(id);
+        Employee employee = getById(id);
 
         if (employee == null) {
             return null;
@@ -37,15 +38,15 @@ public class EmployeeService {
         employee.setEmail(updated.getEmail());
         employee.setDepartment(updated.getDepartment());
 
-        return employee;
+        return repository.save(employee);
     }
 
     public boolean delete(long id) {
-        if (repository.findById(id) == null) {
+        if (!repository.existsById(id)) {
             return false;
         }
 
-        repository.delete(id);
+        repository.deleteById(id);
         return true;
     }
 }
