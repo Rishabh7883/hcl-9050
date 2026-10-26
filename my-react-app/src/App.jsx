@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import Samcode from './component/Samcode';
+import UseFetchApi from './component/UseFetchApi';
 
 function App() {
   const [counter, setCounter] = useState(0);
@@ -28,7 +30,8 @@ function App() {
         </button> */}
         <h2>Counter value</h2>
         <button onClick={Changecounter}>Counter: {counter}</button>
-      
+         <Samcode />
+         <UseFetchApi />
       </div>
     </>
   );

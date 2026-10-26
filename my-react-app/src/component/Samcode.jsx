@@ -1,8 +1,18 @@
 import React from 'react'
+import { useState } from 'react';
 
 function Samcode() {
+const [pointer,setPointer] = useState(0);
+
+function ChangePointer(){
+  setPointer(pointer+1);
+}
+
+
   return (
-    <div>Welcome to React app</div>
+    <div>
+      <button onClick={ChangePointer}>Pointer: {pointer}</button>
+    </div>
   )
 }
 
