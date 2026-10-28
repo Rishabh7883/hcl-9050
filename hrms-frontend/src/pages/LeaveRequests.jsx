@@ -1,4 +1,3 @@
-
 import Layout from '../components/Layout';
 
 function LeaveRequests({ user, setUser }) {
@@ -7,7 +6,7 @@ function LeaveRequests({ user, setUser }) {
       <h1>Leave Requests</h1>
       <div className="panel">
         <h2>Leave Management</h2>
-        <p>Leave request functionality will be added here.</p>
+        <p>Leave request API has not been created yet.</p>
       </div>
     </Layout>
   );

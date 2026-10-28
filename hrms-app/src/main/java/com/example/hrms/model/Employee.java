@@ -1,9 +1,5 @@
-package com.example.hrms.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Positive;
-import org.springframework.stereotype.Component;
+package com.example.hrms.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,20 +8,25 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String email;
+    private String password;
     private String department;
 
     public Employee() {
     }
 
-    public Employee(Long id, String name, String email, String department) {
+    public Employee(Long id, String name, String email,
+                    String password, String department) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.department = department;
     }
 
@@ -51,6 +52,14 @@ public class Employee {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getDepartment() {

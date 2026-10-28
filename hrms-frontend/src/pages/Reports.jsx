@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 
@@ -9,12 +8,12 @@ function Reports({ user, setUser }) {
   useEffect(() => {
     fetch('http://localhost:8070/api/v1/employees')
       .then(res => res.json())
-      .then(data => setEmployees(data))
+      .then(setEmployees)
       .catch(console.error);
 
     fetch('http://localhost:8070/api/v1/attendance')
       .then(res => res.json())
-      .then(data => setAttendance(data))
+      .then(setAttendance)
       .catch(console.error);
   }, []);
 
@@ -27,7 +26,6 @@ function Reports({ user, setUser }) {
           <h3>Total Employees</h3>
           <h1>{employees.length}</h1>
         </div>
-
         <div className="panel">
           <h3>Attendance Records</h3>
           <h1>{attendance.length}</h1>

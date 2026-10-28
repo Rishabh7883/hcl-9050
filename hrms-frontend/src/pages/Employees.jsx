@@ -4,101 +4,107 @@ import Layout from '../components/Layout';
 
 function Employees({ user, setUser }) {
   const [employees, setEmployees] = useState([]);
-  const [name, setName] = useState('');
-  const [designation, setDesignation] = useState('');
-  const [stack, setStack] = useState('');
+  const [form, setForm] = useState({
+    name: '', email: '', password: '', designation: '', stack: ''
+  });
+  const [message, setMessage] = useState('');
 
-  function loadEmployees() {
-    fetch('http://localhost:8070/api/v1/employees')
-      .then(res => res.json())
-      .then(data => setEmployees(data))
-      .catch(console.error);
+  async function loadEmployees() {
+    try {
+      const res = await fetch('http://localhost:8070/api/v1/employees');
+      if (!res.ok) throw new Error('Could not load employees');
+      setEmployees(await res.json());
+    } catch (err) {
+      setMessage(err.message);
+    }
   }
 
   useEffect(() => {
     loadEmployees();
   }, []);
 
-  function addEmployee(e) {
+  async function addEmployee(e) {
     e.preventDefault();
 
-    fetch('http://localhost:8070/api/v1/employees', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, designation, stack })
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Could not add employee');
-        return res.json();
-      })
-      .then(() => {
-        setName('');
-        setDesignation('');
-        setStack('');
-        loadEmployees();
-      })
-      .catch(err => alert(err.message));
+    try {
+      const res = await fetch('http://localhost:8070/api/v1/employees', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+
+      if (!res.ok) throw new Error('Could not add employee');
+
+      setForm({
+        name: '', email: '', password: '', designation: '', stack: ''
+      });
+      setMessage('Employee added');
+      loadEmployees();
+    } catch (err) {
+      setMessage(err.message);
+    }
   }
 
-  function deleteEmployee(id) {
+  async function deleteEmployee(id) {
     if (!window.confirm('Delete this employee?')) return;
 
-    fetch('http://localhost:8070/api/v1/employees/' + id, {
-      method: 'DELETE'
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Could not delete employee');
-        loadEmployees();
-      })
-      .catch(err => alert(err.message));
+    try {
+      const res = await fetch(
+        `http://localhost:8070/api/v1/employees/${id}`,
+        { method: 'DELETE' }
+      );
+
+      if (!res.ok) throw new Error('Could not delete employee');
+
+      loadEmployees();
+    } catch (err) {
+      setMessage(err.message);
+    }
   }
 
   return (
     <Layout user={user} setUser={setUser}>
       <h1>Employees</h1>
+      {message && <p>{message}</p>}
 
       <div className="panel">
         <h2>Add Employee</h2>
 
         <form className="employee-form" onSubmit={addEmployee}>
-          <input value={name} onChange={e => setName(e.target.value)}
-            placeholder="Employee Name" required />
-
-          <input value={designation}
-            onChange={e => setDesignation(e.target.value)}
-            placeholder="Designation" required />
-
-          <input value={stack} onChange={e => setStack(e.target.value)}
-            placeholder="Technology Stack" required />
-
+          {Object.keys(form).map(field => (
+            <input
+              key={field}
+              placeholder={field[0].toUpperCase() + field.slice(1)}
+              type={field === 'password' ? 'password' : 'text'}
+              value={form[field]}
+              onChange={e => setForm({
+                ...form, [field]: e.target.value
+              })}
+              required
+            />
+          ))}
           <button className="primary-btn">Add Employee</button>
         </form>
       </div>
 
       <div className="panel">
-        <h2>Employee Directory</h2>
+        <h2>Employee List</h2>
 
         <div className="table-wrap">
           <table>
             <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Designation</th>
-                <th>Stack</th>
-                <th>Action</th>
-              </tr>
+              <tr><th>ID</th><th>Name</th><th>Email</th><th>Designation</th><th>Action</th></tr>
             </thead>
             <tbody>
-              {employees.map(employee => (
-                <tr key={employee.id}>
-                  <td>#{employee.id}</td>
-                  <td>{employee.name}</td>
-                  <td>{employee.designation}</td>
-                  <td>{employee.stack}</td>
+              {employees.map(e => (
+                <tr key={e.id}>
+                  <td>{e.id}</td>
+                  <td>{e.name}</td>
+                  <td>{e.email || '-'}</td>
+                  <td>{e.designation || '-'}</td>
                   <td>
                     <button className="delete-btn"
-                      onClick={() => deleteEmployee(employee.id)}>
+                      onClick={() => deleteEmployee(e.id)}>
                       Delete
                     </button>
                   </td>

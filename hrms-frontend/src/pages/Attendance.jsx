@@ -2,36 +2,71 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 
+const API = 'http://localhost:8070/api/v1/attendance';
+
+function showTime(value) {
+  if (!value) return '-';
+
+  const match = value.match(/(?:T|\s)?(\d{2}):(\d{2})/);
+
+  if (!match) return value;
+
+  let hour = Number(match[1]);
+  const minute = match[2];
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+
+  hour = hour % 12 || 12;
+
+  return `${hour}:${minute} ${ampm}`;
+}
+
 function Attendance({ user, setUser }) {
   const [records, setRecords] = useState([]);
+  const [message, setMessage] = useState('');
 
-  function loadAttendance() {
-    fetch('http://localhost:8070/api/v1/attendance')
-      .then(res => res.json())
-      .then(data => setRecords(data))
-      .catch(console.error);
+  async function loadAttendance() {
+    try {
+      const res = await fetch(API);
+
+      if (!res.ok) {
+        throw new Error('Could not load attendance');
+      }
+
+      setRecords(await res.json());
+      setMessage('');
+    } catch (err) {
+      setMessage(err.message);
+    }
   }
 
   useEffect(() => {
     loadAttendance();
   }, []);
 
-  function deleteRecord(id) {
+  async function deleteRecord(id) {
     if (!window.confirm('Delete this attendance record?')) return;
 
-    fetch('http://localhost:8080/api/v1/attendance/' + id, {
-      method: 'DELETE'
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Could not delete record');
-        loadAttendance();
-      })
-      .catch(err => alert(err.message));
+    try {
+      const res = await fetch(`${API}/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!res.ok) {
+        throw new Error('Could not delete record');
+      }
+
+      setMessage('Attendance record deleted');
+      await loadAttendance();
+    } catch (err) {
+      setMessage(err.message);
+    }
   }
 
   return (
     <Layout user={user} setUser={setUser}>
       <h1>Attendance Management</h1>
+
+      {message && <p>{message}</p>}
 
       <div className="panel">
         <h2>Attendance Records</h2>
@@ -47,21 +82,30 @@ function Attendance({ user, setUser }) {
                 <th>Action</th>
               </tr>
             </thead>
+
             <tbody>
               {records.map(record => (
                 <tr key={record.id}>
-                  <td>#{record.id}</td>
-                  <td>{record.employeeId}</td>
-                  <td>{record.checkInTime || '-'}</td>
-                  <td>{record.checkOutTime || '-'}</td>
+                  <td>{record.id}</td>
+                  <td>{record.employeeId ?? '-'}</td>
+                  <td>{showTime(record.checkIn)}</td>
+                  <td>{showTime(record.checkOut)}</td>
                   <td>
-                    <button className="delete-btn"
-                      onClick={() => deleteRecord(record.id)}>
+                    <button
+                      className="delete-btn"
+                      onClick={() => deleteRecord(record.id)}
+                    >
                       Delete
                     </button>
                   </td>
                 </tr>
               ))}
+
+              {records.length === 0 && (
+                <tr>
+                  <td colSpan="5">No attendance records found.</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

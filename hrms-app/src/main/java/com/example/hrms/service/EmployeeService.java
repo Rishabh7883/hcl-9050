@@ -1,13 +1,16 @@
 package com.example.hrms.service;
 
-import com.example.hrms.model.Employee;
-import com.example.hrms.repository.EmployeeRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.hrms.model.Employee;
+import com.example.hrms.repository.EmployeeRepository;
 
 @Service
 public class EmployeeService {
+
     private final EmployeeRepository repository;
 
     public EmployeeService(EmployeeRepository repository) {
@@ -20,6 +23,10 @@ public class EmployeeService {
 
     public Employee getById(long id) {
         return repository.findById(id).orElse(null);
+    }
+
+    public Optional<Employee> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
     public Employee add(Employee employee) {
@@ -37,6 +44,11 @@ public class EmployeeService {
         employee.setName(updated.getName());
         employee.setEmail(updated.getEmail());
         employee.setDepartment(updated.getDepartment());
+
+        if (updated.getPassword() != null &&
+                !updated.getPassword().isBlank()) {
+            employee.setPassword(updated.getPassword());
+        }
 
         return repository.save(employee);
     }

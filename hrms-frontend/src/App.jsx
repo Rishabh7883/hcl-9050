@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Employees from './pages/Employees';
 import Attendance from './pages/Attendance';
@@ -13,18 +13,41 @@ import Settings from './pages/Settings';
 function App() {
   const [user, setUser] = useState(null);
 
-  if (!user) {
-    return <Login setUser={setUser} />;
-  }
-
   return (
     <Routes>
-      <Route path="/" element={<Dashboard user={user} setUser={setUser} />} />
-      <Route path="/employees" element={<Employees user={user} setUser={setUser} />} />
-      <Route path="/attendance" element={<Attendance user={user} setUser={setUser} />} />
-      <Route path="/leaves" element={<LeaveRequests user={user} setUser={setUser} />} />
-      <Route path="/reports" element={<Reports user={user} setUser={setUser} />} />
-      <Route path="/settings" element={<Settings user={user} setUser={setUser} />} />
+      <Route path="/login" element={
+        <Login setUser={setUser} />
+      } />
+
+      <Route path="/signup" element={
+        <Signup />
+      } />
+
+      <Route path="/" element={
+        user ? <Dashboard user={user} setUser={setUser} /> : <Navigate to="/login" />
+      } />
+
+      <Route path="/employees" element={
+        user ? <Employees user={user} setUser={setUser} /> : <Navigate to="/login" />
+      } />
+
+      <Route path="/attendance" element={
+        user ? <Attendance user={user} setUser={setUser} /> : <Navigate to="/login" />
+      } />
+
+      <Route path="/leaves" element={
+        user ? <LeaveRequests user={user} setUser={setUser} /> : <Navigate to="/login" />
+      } />
+
+      <Route path="/reports" element={
+        user ? <Reports user={user} setUser={setUser} /> : <Navigate to="/login" />
+      } />
+
+      <Route path="/settings" element={
+        user ? <Settings user={user} setUser={setUser} /> : <Navigate to="/login" />
+      } />
+
+      <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
 }
